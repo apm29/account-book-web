@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "~/*": [
+        "src/*"
+      ]
+    },
+    "types": [
+      "naive-ui/volar"
+    ],
+    "jsx": "preserve"
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

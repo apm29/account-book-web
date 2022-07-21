@@ -8,10 +8,10 @@ body {
   box-sizing: border-box;
 }
 
-/* html.dark {
+html.dark {
   background: #515151;
   color: #cfcfcf;
-} */
+}
 
 #nprogress {
   pointer-events: none;

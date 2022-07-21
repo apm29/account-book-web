@@ -1,13 +1,14 @@
 <template>
-  <router-view />
+  <n-config-provider
+    :locale="zhCN"
+    :theme="!isDark ? darkTheme : lightTheme"
+    :date-locale="dateZhCN"
+  >
+    <router-view />
+  </n-config-provider>
 </template>
-
-<style lang="scss">
-#app {
-  text-align: center;
-  color: #2c3e50;
-  img {
-    width: 50px;
-  }
-}
-</style>
+<script setup>
+import { isDark } from "~/composables";
+import { darkTheme, lightTheme } from "naive-ui";
+import { zhCN, dateZhCN } from "naive-ui";
+</script>

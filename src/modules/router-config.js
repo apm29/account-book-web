@@ -17,7 +17,7 @@ export const install = ({ router }) => {
     const appStore = useAppStore()
     if (!appStore.token) {
       return {
-        path: "/login",
+        name: "Login",
       };
     }
     return true;

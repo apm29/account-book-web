@@ -7,7 +7,7 @@ import styleImport, { VantResolve } from 'vite-plugin-style-import';
 import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
 import {
-  VantResolver,
+  VantResolver, NaiveUiResolver
 } from 'unplugin-vue-components/resolvers'
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -22,7 +22,8 @@ export default defineConfig({
     Pages(),
     Components({
       resolvers: [
-        VantResolver()
+        VantResolver(),
+        NaiveUiResolver()
       ]
     }),
     // https://github.com/antfu/unplugin-auto-import
