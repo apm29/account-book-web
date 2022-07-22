@@ -8,6 +8,8 @@ import './styles/main.css'
 import 'uno.css'
 // preflights from tailwind 基于tailwind的css重置
 import '@unocss/reset/tailwind.css'
+// 通用字体
+import 'vfonts/Lato.css'
 //router
 const router = createRouter({
   history: createWebHashHistory(),

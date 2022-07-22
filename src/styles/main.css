@@ -6,11 +6,12 @@ body {
   transition: color 0.6s ,background 0.6s ;
   font-family: "Helvetica Neue", Arial, sans-serif;
   box-sizing: border-box;
+  color: #121212
 }
 
 html.dark {
-  background: #515151;
-  color: #cfcfcf;
+  background: #121212;
+  color: aliceblue;
 }
 
 #nprogress {

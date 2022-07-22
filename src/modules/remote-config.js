@@ -1,10 +1,20 @@
 import { remote } from "~/composables";
-import { localToken } from "~/composables";
-import { Notify, Toast } from "vant";
+import { localToken, isDark } from "~/composables";
 const JAVA_SUCCESS_CODE = "1";
-
-const loadingInstance = ref(null);
-const loadingCount = ref(0);
+import {
+  createDiscreteApi,
+  darkTheme,
+  lightTheme
+} from 'naive-ui'
+const configProviderPropsRef = computed(() => ({
+  theme: isDark.value ? darkTheme : lightTheme
+}))
+const { message, notification, dialog, loadingBar } = createDiscreteApi(
+  ['message', 'dialog', 'notification', 'loadingBar'],
+  {
+    configProviderProps: configProviderPropsRef
+  }
+)
 
 export const install = () => {
   remote.init({
@@ -25,26 +35,15 @@ export const install = () => {
           //在此处进行响应拦截
           if (axiosResponse.data.status === JAVA_SUCCESS_CODE) {
             if (option.showSuccessMessage) {
-              Notify({
-                message:
-                  axiosResponse.data.msg || axiosResponse.data.text || "操作成功",
-                type: "success",
-                duration: 5000,
-              });
+              message.success(axiosResponse.data.msg || axiosResponse.data.text || "操作成功");
             }
             resolve(axiosResponse.data);
           } else {
-            Notify({
-              message: axiosResponse.data.msg || axiosResponse.data.text,
-              type: "danger",
-            });
+            message.error(axiosResponse.data.msg || axiosResponse.data.text);
             reject(axiosResponse.data.msg);
           }
         } else {
-          Notify({
-            message: axiosResponse.data.msg || axiosResponse.statusText,
-            type: "danger",
-          });
+          message.error(axiosResponse.data.msg || axiosResponse.statusText);
           reject(axiosResponse);
         }
       });
@@ -52,43 +51,20 @@ export const install = () => {
 
     onInterceptRejectedRequest(error, option) {
       if (option.showErrorMessage && error) {
-        Notify({
-          message: error.message || String(error),
-          type: "danger",
-        });
+        message.error(error.message || String(error));
       }
       return error;
     },
     onInterceptRejectedResponse(error, option) {
       if (option.showErrorMessage && error) {
-        Notify({
-          message: error.message || String(error),
-          type: "danger",
-        });
+        message.error(error.message || String(error));
       }
       return error;
     },
 
     startLoading(option) {
-      if (!option.silent) {
-        loadingCount.value += 1;
-        if (unref(loadingCount) > 0) {
-          loadingInstance.value = Toast.loading({
-            message: "加载中...",
-            duration: 0,
-            forbidClick: true,
-            overlay: true,
-          });
-        }
-      }
     },
     stopLoading(option) {
-      if (!option.silent) {
-        loadingCount.value -= 1;
-        if (unref(loadingCount) <= 0) {
-          unref(loadingInstance).clear();
-        }
-      }
     },
   });
 }

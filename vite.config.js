@@ -3,11 +3,11 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Pages from 'vite-plugin-pages'
 import Components from 'unplugin-vue-components/vite'
-import styleImport, { VantResolve } from 'vite-plugin-style-import';
+import styleImport from 'vite-plugin-style-import';
 import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
 import {
-  VantResolver, NaiveUiResolver
+  NaiveUiResolver
 } from 'unplugin-vue-components/resolvers'
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -22,7 +22,6 @@ export default defineConfig({
     Pages(),
     Components({
       resolvers: [
-        VantResolver(),
         NaiveUiResolver()
       ]
     }),
@@ -34,10 +33,13 @@ export default defineConfig({
         'vue/macros',
         '@vueuse/head',
         '@vueuse/core',
+        {
+          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
+        }
       ],
     }),
     styleImport({
-      resolves: [VantResolve()],
+      resolves: [],
     }),
     Unocss()
   ],
