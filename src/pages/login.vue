@@ -8,7 +8,7 @@
     items="center"
     space="y-6"
   >
-    <h1 text="2xl">FC Note</h1>
+    <AppTitle></AppTitle>
     <div
       backdrop-filter="~ blur-xl"
       border="~ green-600 dark:green-300"
@@ -48,14 +48,7 @@
     </div>
 
     <div space="x-3">
-      <n-popover trigger="hover" placement="bottom">
-        <template #trigger>
-          <n-button circle tertiary type="primary" @click="toggleDark">
-            <div i="carbon-sun dark:carbon-moon" />
-          </n-button>
-        </template>
-        {{ isDark ? "深色模式" : "浅色模式" }}
-      </n-popover>
+      <DarkToggle></DarkToggle>
       <n-popover trigger="hover" placement="bottom">
         <template #trigger>
           <n-button circle tertiary type="primary" @click="handleRegister">
@@ -69,8 +62,11 @@
 </template>
 <script setup>
 import { useAppStore } from "~/store";
-import { toggleDark, remote, isDark } from "~/composables";
-const store = useAppStore();
+import { loginByPhone } from "~/api/authentication/login";
+import { useRouter } from "vue-router";
+import DarkToggle from "../components/DarkToggle.vue";
+const appStore = useAppStore();
+const router = useRouter();
 const rules = {
   phone: {
     required: true,
@@ -89,8 +85,14 @@ const loginForm = ref({
 });
 
 function handleLogin() {
-  remote.postForm({
-    url: "/java/user/login",
+  appStore.$patch({
+    token: "TEST_TOKEN",
+  });
+  loginByPhone(unref(loginForm)).finally(() => {
+    appStore.loginUser();
+    router.replace({
+      name: "Home",
+    });
   });
 }
 
@@ -115,7 +117,7 @@ function handleRegister() {}
     input:-webkit-autofill {
       text-fill-color: #222;
       -webkit-text-fill-color: rgba(222, 222, 222, 50);
-      -webkit-box-shadow: 0 0 10000px 0 #222 inset !important;
+      -webkit-box-shadow: 0 0 10000px 0 rgb(30, 30, 33) inset !important;
     }
   }
 }

@@ -19,6 +19,8 @@ export const install = ({ router }) => {
       return {
         name: "Login",
       };
+    } else {
+      appStore.loginUser()
     }
     return true;
   })
