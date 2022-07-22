@@ -50,5 +50,18 @@ export default defineConfig({
         additionalData: '@import "src/assets/styles/var.scss";'
       }
     }
+  },
+  server: {
+    port: 3000,
+    open: false,
+    host: "0.0.0.0",
+    https: false,
+    hotOnly: false,
+    proxy: {
+      "/account-book": {
+        target: "http://localhost:9901",
+        changeOrigin: true,
+      },
+    },
   }
 })

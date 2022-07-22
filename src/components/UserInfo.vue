@@ -1,6 +1,7 @@
 <template>
   <n-dropdown v-if="userInfo" @select="handleSelect" :options="options" trigger="click">
-    <n-avatar :size="32" circle :src="userInfo.photo" cursor="pointer"> </n-avatar>
+    <n-avatar :size="32" circle :src="userInfo.userDetail?.photo" cursor="pointer">
+    </n-avatar>
   </n-dropdown>
   <h3 v-else text="sm orange-400" cursor="pointer" @click="handleLogin">未登录</h3>
 </template>

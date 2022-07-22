@@ -19,8 +19,14 @@ export const install = ({ router }) => {
       return {
         name: "Login",
       };
-    } else {
-      appStore.loginUser()
+    } else if (appStore.token && !appStore.userInfo) {
+      try {
+        await appStore.loginUserByToken(appStore.token)
+      } catch (error) {
+        return {
+          name: "Login",
+        };
+      }
     }
     return true;
   })

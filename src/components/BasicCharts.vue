@@ -26,9 +26,13 @@ function reload() {
   resetOption();
 }
 const handleUnmounted = () => {
-  const charts = echarts.getInstanceByDom(unref(chartContainer));
-  if (charts) {
-    charts.dispose();
+  try {
+    const charts = echarts.getInstanceByDom(unref(chartContainer));
+    if (charts) {
+      charts.dispose();
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -47,15 +51,10 @@ function resetOption() {
 }
 
 onMounted(reload);
-onUnmounted(handleUnmounted);
+onBeforeUnmount(handleUnmounted);
 
 watch(isDark, reload);
 watch(option, resetOption, { deep: true });
-
-function getChart() {
-  const charts = echarts.getInstanceByDom(unref(chartContainer));
-  console.log(charts);
-}
 </script>
 
 <style lang="scss" scoped></style>

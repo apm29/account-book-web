@@ -1,6 +1,6 @@
 import { remote } from "~/composables";
 import { localToken, isDark } from "~/composables";
-const JAVA_SUCCESS_CODE = "1";
+const JAVA_SUCCESS_CODE = 200;
 import {
   createDiscreteApi,
   darkTheme,
@@ -33,7 +33,7 @@ export const install = () => {
       return new Promise((resolve, reject) => {
         if (axiosResponse.status === 200) {
           //在此处进行响应拦截
-          if (axiosResponse.data.status === JAVA_SUCCESS_CODE) {
+          if (axiosResponse.data.code === JAVA_SUCCESS_CODE) {
             if (option.showSuccessMessage) {
               message.success(axiosResponse.data.msg || axiosResponse.data.text || "操作成功");
             }

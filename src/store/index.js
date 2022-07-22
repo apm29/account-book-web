@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { localToken } from "~/composables";
+import { getUserInfo } from "~/api/authentication/login";
 
 export const useAppStore = defineStore("app-state", {
   state: () => {
@@ -10,14 +11,18 @@ export const useAppStore = defineStore("app-state", {
   },
   actions: {
     logoutUser() {
-      this.userInfo = null
-      this.token = null
+      this.userInfo = null;
+      this.token = null;
     },
 
-    loginUser() {
-      this.userInfo = {
-        photo: "https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-      }
+    loginUser(userInfo, token) {
+      this.userInfo = userInfo;
+      this.token = token;
+    },
+    async loginUserByToken(token) {
+      this.token = token;
+      const { data } = await getUserInfo()
+      this.userInfo = data;
     },
   },
 });

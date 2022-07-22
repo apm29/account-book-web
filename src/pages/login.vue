@@ -39,7 +39,7 @@
           />
         </n-form-item>
         <n-form-item>
-          <n-button block type="success" @click="handleLogin" relative="~">
+          <n-button block type="success" @click="handleLogin(formRef)" relative="~">
             LOGIN
             <i i="carbon-arrow-right" absolute="~" right="4"></i>
           </n-button>
@@ -71,12 +71,12 @@ const rules = {
   phone: {
     required: true,
     message: "请输入电话号码",
-    trigger: ["input"],
+    trigger: ["input", "blur"],
   },
   password: {
     required: true,
     message: "请输入密码",
-    trigger: ["input"],
+    trigger: ["input", "blur"],
   },
 };
 const loginForm = ref({
@@ -84,15 +84,21 @@ const loginForm = ref({
   phone: null,
 });
 
-function handleLogin() {
-  appStore.$patch({
-    token: "TEST_TOKEN",
-  });
-  loginByPhone(unref(loginForm)).finally(() => {
-    appStore.loginUser();
-    router.replace({
-      name: "Home",
-    });
+const formRef = ref();
+const message = useMessage();
+function handleLogin(form) {
+  form.validate((errors) => {
+    if (errors) {
+      console.log(errors);
+      message.error("请填写完整");
+    } else {
+      loginByPhone(unref(loginForm)).then((res) => {
+        appStore.loginUser(res.data, res.token);
+        router.replace({
+          name: "Home",
+        });
+      });
+    }
   });
 }
 
