@@ -12,6 +12,7 @@
     "@vueuse/core": "^8.2.6",
     "@vueuse/head": "^0.7.6",
     "axios": "^0.26.1",
+    "echarts": "^5.3.3",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.13",
     "qs": "^6.10.3",

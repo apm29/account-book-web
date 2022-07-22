@@ -206,6 +206,7 @@ const Utils = {
     fileName: undefined,
     showSuccessMessage: false,
     showErrorMessage: true,
+    silent: true,
     tag: "app", //loading指示器的tag(分组)
     taskName: "请求", //loading指示器的名称
     cancelSource: undefined,

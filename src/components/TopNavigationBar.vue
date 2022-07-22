@@ -6,6 +6,7 @@
     p="x-3 t-2"
     border="b gray-500/50"
     gap="x-3"
+    h="55px"
   >
     <AppTitle></AppTitle>
     <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
@@ -28,15 +29,13 @@
 </template>
 
 <script setup>
-import MenuIcons from "~/components/MenuIcons.vue";
 import UserInfo from "./UserInfo.vue";
-
 import { useAppStore } from "@/store";
 
 const appStore = useAppStore();
 const userInfo = computed(() => appStore.userInfo);
 function renderIcon(icon) {
-  return () => h(MenuIcons, { icon: icon });
+  return () => h("i", { class: icon });
 }
 
 const activeKey = ref();

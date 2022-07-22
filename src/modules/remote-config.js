@@ -63,8 +63,14 @@ export const install = () => {
     },
 
     startLoading(option) {
+      if (!option.silent) {
+        loadingBar.start()
+      }
     },
     stopLoading(option) {
+      if (!option.silent) {
+        loadingBar.finish()
+      }
     },
   });
 }
