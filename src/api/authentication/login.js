@@ -11,6 +11,18 @@ export function loginByPhone({
   })
 }
 
+export function registerByPhone({
+  phone, captcha
+}) {
+  return remote.postForm({
+    url: "/account-book/authentication-web/user/registerByPhone",
+    data: {
+      phone, captcha
+    }
+  })
+}
+
+
 
 export function getUserInfo() {
   return remote.postForm({

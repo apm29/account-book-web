@@ -59,7 +59,7 @@ export default defineConfig({
     hotOnly: false,
     proxy: {
       "/account-book": {
-        target: "http://localhost:9901",
+        target: "http://account.jiayupearl.shop",
         changeOrigin: true,
       },
     },

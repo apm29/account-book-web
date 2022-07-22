@@ -63,8 +63,7 @@
 <script setup>
 import { useAppStore } from "~/store";
 import { loginByPhone } from "~/api/authentication/login";
-import { useRouter } from "vue-router";
-import DarkToggle from "../components/DarkToggle.vue";
+import DarkToggle from "~/components/DarkToggle.vue";
 const appStore = useAppStore();
 const router = useRouter();
 const rules = {
@@ -102,7 +101,14 @@ function handleLogin(form) {
   });
 }
 
-function handleRegister() {}
+function handleRegister() {
+  router.replace({
+    name: "Register",
+    query: {
+      phone: unref(loginForm).phone,
+    },
+  });
+}
 </script>
 <style scoped></style>
 <route>
