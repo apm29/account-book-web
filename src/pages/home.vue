@@ -1,9 +1,10 @@
 <template>
   <n-scrollbar style="height: calc(100vh - 55px)">
-    <div p="x-3 y-3" space="y-5">
+    <div p="x-6 y-5" space="y-5">
       <MonthlyBill />
       <MonthlyBudget />
       <MonthlyExpense />
+      <Property />
     </div>
   </n-scrollbar>
 </template>
