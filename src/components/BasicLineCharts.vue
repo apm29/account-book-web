@@ -24,6 +24,12 @@ const option = computed(() => ({
     left: "center",
     top: "0",
   },
+  grid: {
+    left: 32,
+    right: 18,
+    top: 30,
+    bottom: 18,
+  },
   xAxis: {
     type: "category",
     data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
