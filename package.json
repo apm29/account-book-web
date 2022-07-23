@@ -1,5 +1,5 @@
 {
-  "name": "atcc-mobile-vue3",
+  "name": "fc-note",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -12,6 +12,7 @@
     "@vueuse/core": "^8.2.6",
     "@vueuse/head": "^0.7.6",
     "axios": "^0.26.1",
+    "dayjs": "^1.11.4",
     "echarts": "^5.3.3",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.13",

@@ -9,7 +9,7 @@
     h="55px"
   >
     <AppTitle></AppTitle>
-    <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
+    <n-menu :value="activeKey" mode="horizontal" :options="menuOptions" />
     <div flex="grow"></div>
     <n-input
       placeholder="搜索类别/备注"
@@ -31,83 +31,53 @@
 <script setup>
 import UserInfo from "./UserInfo.vue";
 import { useAppStore } from "@/store";
-
+import { RouterLink, useRoute } from "vue-router";
+const route = useRoute();
 const appStore = useAppStore();
 const userInfo = computed(() => appStore.userInfo);
 function renderIcon(icon) {
   return () => h("i", { class: icon });
 }
+function renderRoute(name, title) {
+  return () =>
+    h(
+      RouterLink,
+      {
+        to: {
+          name: name,
+        },
+      },
+      { default: () => title }
+    );
+}
 
-const activeKey = ref();
+const activeKey = computed(() => route.name);
 
 const menuOptions = [
   {
-    label: "账单",
-    key: "bill",
+    label: renderRoute("ExpenseIndex", "账单"),
+    key: "ExpenseIndex",
     icon: renderIcon("i-carbon:money"),
   },
   {
-    label: "预算",
-    key: "budget",
+    label: renderRoute("BudgetIndex", "预算"),
+    key: "BudgetIndex",
     icon: renderIcon("i-carbon:wallet"),
-    children: [
-      {
-        label: "鼠",
-        key: "rat",
-      },
-    ],
   },
   {
-    label: "资产",
-    key: "assets",
+    label: renderRoute("AssetsIndex", "资产"),
+    key: "AssetsIndex",
     icon: renderIcon("i-carbon:manage-protection"),
   },
   {
     label: "更多",
-    key: "dance-dance-dance",
+    key: "more",
     icon: renderIcon("i-carbon:overflow-menu-vertical"),
     children: [
       {
-        type: "group",
-        label: "人物",
-        key: "people",
-        children: [
-          {
-            label: "叙事者",
-            key: "narrator",
-            icon: renderIcon("i-carbon:add"),
-          },
-          {
-            label: "羊男",
-            key: "sheep-man",
-            icon: renderIcon("i-carbon:add"),
-          },
-        ],
-      },
-      {
-        label: "饮品",
-        key: "beverage",
-        icon: renderIcon("i-carbon:add"),
-        children: [
-          {
-            label: "威士忌",
-            key: "whisky",
-          },
-        ],
-      },
-      {
-        label: "食物",
-        key: "food",
-        children: [
-          {
-            label: "三明治",
-            key: "sandwich",
-          },
-        ],
-      },
-      {
-        label: "过去增多，未来减少",
-        key: "the-past-increases-the-future-recedes",
+        label: renderRoute("FamilyIndex", "我的家庭"),
+        key: "FamilyIndex",
+        icon: renderIcon("i-carbon:pedestrian-family"),
       },
     ],
   },

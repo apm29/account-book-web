@@ -7,7 +7,7 @@
     cursor="default"
     @click="link ? handleAppClick : null"
   >
-    <n-image h="6" src="/logo.png"></n-image>
+    <n-avatar round h="6" src="/logo.png"></n-avatar>
     {{ AppTitle }}
   </h1>
 </template>

@@ -1,12 +1,12 @@
 <template>
-  <n-scrollbar style="height: calc(100vh - 55px)">
+  <ScrollableContent>
     <div p="x-6 y-5" space="y-5">
       <MonthlyBill />
       <MonthlyBudget />
       <MonthlyExpense />
       <Property />
     </div>
-  </n-scrollbar>
+  </ScrollableContent>
 </template>
 
 <script setup>
