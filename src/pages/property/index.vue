@@ -58,7 +58,10 @@
               </n-button>
             </div>
           </template>
-          {{ asset.assetType.assetName }}
+          <div>
+            <div>{{ asset.assetType.assetName }}</div>
+            <div text="gray-500/60">{{ asset.remark }}</div>
+          </div>
         </n-list-item>
         <n-h5 prefix="bar">负债</n-h5>
         <n-list-item v-for="liability of property.liabilities" p="!x-5 !y-2">
@@ -77,8 +80,17 @@
               </n-button>
             </div>
           </template>
-          {{ liability.liabilityType.liabilityName }}
+          <div>
+            <div>{{ liability.liabilityType.liabilityName }}</div>
+            <div text="gray-500/60">{{ liability.remark }}</div>
+          </div>
         </n-list-item>
+        <template #footer>
+          <n-button type="primary" block>
+            <template #icon><i i-carbon:add></i></template>
+            新增资产
+          </n-button>
+        </template>
       </n-list>
     </ListSkeleton>
     <n-modal
@@ -200,6 +212,8 @@ function handleSaveLiability() {
     })
     .finally(() => (loading.value = false));
 }
+
+//TODO 新增资产
 </script>
 
 <style lang="scss" scoped></style>

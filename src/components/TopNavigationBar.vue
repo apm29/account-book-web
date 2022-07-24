@@ -4,7 +4,7 @@
     flex="~"
     items="center"
     p="x-3 t-2"
-    border="b gray-500/50"
+    border="b gray-400/50"
     gap="x-3"
     h="55px"
   >
