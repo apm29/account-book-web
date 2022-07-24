@@ -53,7 +53,7 @@
               <n-text type="primary">
                 {{ asset.asset.toFixed(2) }}
               </n-text>
-              <n-button text>
+              <n-button text @click="handleEditAsset(asset)">
                 <i i-carbon:chevron-right text="2xl"></i>
               </n-button>
             </div>
@@ -72,7 +72,7 @@
               <n-text type="primary">
                 {{ liability.liability.toFixed(2) }}
               </n-text>
-              <n-button text>
+              <n-button text @click="handleEditLiability(liability)">
                 <i i-carbon:chevron-right text="2xl"></i>
               </n-button>
             </div>
@@ -81,12 +81,67 @@
         </n-list-item>
       </n-list>
     </ListSkeleton>
+    <n-modal
+      v-model:show="showEditAssetModal"
+      class="custom-card"
+      preset="card"
+      title="编辑资产"
+      :style="{ width: '400px' }"
+      size="huge"
+    >
+      <n-form-item label="金额">
+        <n-input-number w-full v-model:value="editAssetForm.asset">
+          <template #prefix> ￥ </template>
+        </n-input-number>
+      </n-form-item>
+      <n-form-item label="备注">
+        <n-input v-model:value="editAssetForm.remark">
+          <template #suffix>
+            <span text="gray-500/50">选填</span>
+          </template>
+        </n-input>
+      </n-form-item>
+      <template #footer>
+        <n-button :loading="loading" type="success" @click="handleSaveAsset">
+          保存
+        </n-button>
+      </template>
+    </n-modal>
+    <n-modal
+      v-model:show="showEditLiabilityModal"
+      class="custom-card"
+      preset="card"
+      title="编辑负债"
+      :style="{ width: '400px' }"
+      size="huge"
+    >
+      <n-form-item label="金额">
+        <n-input-number w-full v-model:value="editLiabilityForm.liability">
+          <template #prefix> ￥ </template>
+        </n-input-number>
+      </n-form-item>
+      <n-form-item label="备注">
+        <n-input v-model:value="editLiabilityForm.remark">
+          <template #suffix>
+            <span text="gray-500/50">选填</span>
+          </template>
+        </n-input>
+      </n-form-item>
+      <template #footer>
+        <n-button :loading="loading" type="success" @click="handleSaveLiability">
+          保存
+        </n-button>
+      </template>
+    </n-modal>
   </ScrollableContent>
 </template>
 
 <script setup>
-import { getMyProperty } from "@/api/user/property";
-import { onActivated } from "vue";
+import {
+  getMyProperty,
+  setPropertyAsset,
+  setPropertyLiability,
+} from "@/api/user/property";
 
 const loading = ref(true);
 const property = ref({});
@@ -96,6 +151,55 @@ async function getPropertyData() {
   property.value = data;
 }
 onActivated(getPropertyData);
+
+//编辑
+const [showEditAssetModal, toggleEditAsset] = useToggle();
+const editAssetForm = ref({
+  asset: 0.0,
+  remark: "",
+  assetId: null,
+});
+function handleEditAsset(asset) {
+  editAssetForm.value = {
+    asset: asset.asset,
+    remark: asset.remark,
+    assetId: asset.id,
+  };
+  toggleEditAsset();
+}
+function handleSaveAsset() {
+  loading.value = true;
+  setPropertyAsset(unref(editAssetForm))
+    .then(() => {
+      toggleEditAsset();
+      return getPropertyData();
+    })
+    .finally(() => (loading.value = false));
+}
+
+const [showEditLiabilityModal, toggleEditLiability] = useToggle();
+const editLiabilityForm = ref({
+  liability: 0.0,
+  remark: "",
+  liabilityId: null,
+});
+function handleEditLiability(liability) {
+  editLiabilityForm.value = {
+    liability: liability.liability,
+    remark: liability.remark,
+    liabilityId: liability.id,
+  };
+  toggleEditLiability();
+}
+function handleSaveLiability() {
+  loading.value = true;
+  setPropertyLiability(unref(editLiabilityForm))
+    .then(() => {
+      toggleEditLiability();
+      return getPropertyData();
+    })
+    .finally(() => (loading.value = false));
+}
 </script>
 
 <style lang="scss" scoped></style>
