@@ -12,6 +12,12 @@
               </template>
               创建家庭
             </n-button>
+            <n-button text type="primary" @click="handleJoin">
+              <template #icon>
+                <i i-carbon:add></i>
+              </template>
+              加入家庭
+            </n-button>
           </div>
         </template>
         <n-thing v-for="family of pagedData" m="t-12">
@@ -33,12 +39,32 @@
             </n-text>
           </template>
           <template #footer>
-            <transition-group>
-              <div v-for="member of family.members" :key="member.id">
-                <n-avatar round :src="member.userDetail.photo" bordered> </n-avatar>
-                <n-gradient-text type="info" :size="8">{{ member.name }}</n-gradient-text>
-              </div>
-            </transition-group>
+            <div flex="~ wrap" p="y-6">
+              <transition-group>
+                <div
+                  v-for="member of family.members"
+                  :key="member.id"
+                  flex="~"
+                  gap="x-4"
+                  m="r-4 y-1"
+                >
+                  <n-avatar round :src="member.userDetail.photo" bordered> </n-avatar>
+                  <div flex="~ col">
+                    <n-gradient-text type="info" :size="8">{{
+                      member.name
+                    }}</n-gradient-text>
+                    <span text="xs gray-500/50">
+                      创建于
+                      <n-time
+                        :time="0"
+                        :to="dayjs().subtract(dayjs(member.createTime)).valueOf()"
+                        type="relative"
+                      />
+                    </span>
+                  </div>
+                </div>
+              </transition-group>
+            </div>
           </template>
           <template #action>
             <n-space>
@@ -68,13 +94,7 @@
         <template #footer>
           <div flex="~" justify="center" gap="x-4">
             <n-button @click="handleCreate"> 创建自己的家庭 </n-button>
-            <n-button
-              @click="
-                $router.push({ name: 'FamilyJoin', query: { redirect: 'FamilyIndex' } })
-              "
-            >
-              加入家庭
-            </n-button>
+            <n-button @click="handleJoin"> 加入家庭 </n-button>
           </div>
         </template>
       </n-result>
@@ -109,12 +129,14 @@ async function getPagedData({ refresh } = {}) {
   pagedData.value = data.content || [];
   total.value = data.totalElements;
 }
-onMounted(getPagedData);
 onActivated(getPagedData);
 
 const router = useRouter();
 function handleCreate() {
   router.push({ name: "FamilyCreate", query: { redirect: "FamilyIndex" } });
+}
+function handleJoin() {
+  router.push({ name: "FamilyJoin", query: { redirect: "FamilyIndex" } });
 }
 </script>
 

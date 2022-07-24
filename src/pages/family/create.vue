@@ -47,20 +47,23 @@ function handleCreateFamily() {
   if (!familyName.value) {
     return message.error("请输入家庭名称");
   }
+  loading.value = true;
   createFamily({
     familyName: unref(familyName),
-  }).then(() => {
-    dialog.success({
-      title: "成功",
-      content: "家庭已创建",
-      positiveText: "前往查看",
-      onPositiveClick: () => {
-        router.replace({
-          name: route.query?.redirect || "FamilyIndex",
-        });
-      },
-    });
-  });
+  })
+    .then(() => {
+      dialog.success({
+        title: "成功",
+        content: "家庭已创建",
+        positiveText: "前往查看",
+        onPositiveClick: () => {
+          router.replace({
+            name: route.query?.redirect || "FamilyIndex",
+          });
+        },
+      });
+    })
+    .finally(() => (loading.value = false));
 }
 </script>
 
