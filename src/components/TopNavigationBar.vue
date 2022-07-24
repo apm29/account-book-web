@@ -65,8 +65,8 @@ const menuOptions = [
     icon: renderIcon("i-carbon:wallet"),
   },
   {
-    label: renderRoute("AssetsIndex", "资产"),
-    key: "AssetsIndex",
+    label: renderRoute("PropertyIndex", "资产"),
+    key: "PropertyIndex",
     icon: renderIcon("i-carbon:manage-protection"),
   },
   {

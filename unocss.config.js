@@ -50,4 +50,14 @@ export default defineConfig({
     transformerDirectives(),
     transformerVariantGroup(),
   ],
+  safelist: [
+    "i-ant-design:credit-card-twotone",
+    "i-mdi:cash-100",
+    "i-ant-design:credit-card-twotone",
+    "i-ant-design:alipay-outlined",
+    "i-carbon:logo-wechat",
+    "i-ant-design:stock-outlined",
+    "i-ant-design:stock-outlined",
+    "i-ant-design:money-collect-outlined",
+  ]
 })
