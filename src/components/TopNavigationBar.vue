@@ -8,7 +8,7 @@
     gap="x-3"
     h="55px"
   >
-    <AppTitle></AppTitle>
+    <AppTitle v-if="!md"></AppTitle>
     <n-menu :value="activeKey" mode="horizontal" :options="menuOptions" />
     <div flex="grow"></div>
     <n-input
@@ -32,6 +32,9 @@
 import UserInfo from "./UserInfo.vue";
 import { useAppStore } from "@/store";
 import { RouterLink, useRoute } from "vue-router";
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+const breakpoints = useBreakpoints(breakpointsTailwind);
+
 const route = useRoute();
 const appStore = useAppStore();
 const userInfo = computed(() => appStore.userInfo);
@@ -52,8 +55,7 @@ function renderRoute(name, title) {
 }
 
 const activeKey = computed(() => route.name);
-
-const menuOptions = [
+const functions = [
   {
     label: renderRoute("ExpenseIndex", "账单"),
     key: "ExpenseIndex",
@@ -69,17 +71,39 @@ const menuOptions = [
     key: "PropertyIndex",
     icon: renderIcon("i-carbon:manage-protection"),
   },
-  {
-    label: "更多",
-    key: "more",
-    icon: renderIcon("i-carbon:overflow-menu-vertical"),
-    children: [
-      {
-        label: renderRoute("FamilyIndex", "我的家庭"),
-        key: "FamilyIndex",
-        icon: renderIcon("i-carbon:pedestrian-family"),
-      },
-    ],
-  },
 ];
+const md = breakpoints.smaller("md");
+const menuOptions = computed(() => {
+  return md.value
+    ? [
+        {
+          label: "",
+          key: "more",
+          icon: renderIcon("i-carbon:menu"),
+          children: [
+            ...functions,
+            {
+              label: renderRoute("FamilyIndex", "我的家庭"),
+              key: "FamilyIndex",
+              icon: renderIcon("i-carbon:pedestrian-family"),
+            },
+          ],
+        },
+      ]
+    : [
+        ...functions,
+        {
+          label: "更多",
+          key: "more",
+          icon: renderIcon("i-carbon:overflow-menu-vertical"),
+          children: [
+            {
+              label: renderRoute("FamilyIndex", "我的家庭"),
+              key: "FamilyIndex",
+              icon: renderIcon("i-carbon:pedestrian-family"),
+            },
+          ],
+        },
+      ];
+});
 </script>
