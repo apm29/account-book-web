@@ -1,7 +1,7 @@
 <template>
   <ScrollableContent>
     <ListSkeleton :loading="loading">
-      <n-list v-if="pagedData && pagedData.length" p="!x-4 !y-6">
+      <n-list v-if="pagedData && pagedData.length" p="!x-4 !t-6">
         <template #header>
           <div flex="~">
             <n-text>我加入的家庭</n-text>
@@ -83,6 +83,16 @@
             </n-space>
           </template>
         </n-thing>
+        <template #footer>
+          <n-pagination
+            v-model:page="pageNo"
+            v-model:page-size="pageSize"
+            :page-count="pageCount"
+            show-size-picker
+            justify="end"
+            :page-sizes="[10, 20, 30, 40]"
+          />
+        </template>
       </n-list>
       <n-result
         v-else
@@ -113,6 +123,7 @@ const loading = ref(true);
 const total = ref(0);
 const pageNo = ref(1);
 const pageSize = ref(30);
+const pageCount = ref(1);
 const pagedData = ref([]);
 async function getPagedData({ refresh } = {}) {
   if (refresh) {
@@ -128,9 +139,11 @@ async function getPagedData({ refresh } = {}) {
   }).finally(() => (loading.value = false));
   pagedData.value = data.content || [];
   total.value = data.totalElements;
+  pageCount.value = data.totalPages;
 }
 onActivated(getPagedData);
-
+watch(pageNo, getPagedData);
+watch(pageSize, () => getPagedData({ refresh: true }));
 const router = useRouter();
 function handleCreate() {
   router.push({ name: "FamilyCreate", query: { redirect: "FamilyIndex" } });

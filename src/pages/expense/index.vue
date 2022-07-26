@@ -1,7 +1,7 @@
 <template>
   <ScrollableContent>
     <ListSkeleton :loading="loading">
-      <n-list v-if="pagedData && pagedData.lenngth"></n-list>
+      <n-list v-if="pagedData && pagedData.length"></n-list>
     </ListSkeleton>
   </ScrollableContent>
 </template>
