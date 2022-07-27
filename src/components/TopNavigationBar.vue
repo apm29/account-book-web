@@ -30,7 +30,7 @@
 
 <script setup>
 import UserInfo from "./UserInfo.vue";
-import { useAppStore } from "@/store";
+import { useAppStore } from "~/store";
 import { RouterLink, useRoute } from "vue-router";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 const breakpoints = useBreakpoints(breakpointsTailwind);

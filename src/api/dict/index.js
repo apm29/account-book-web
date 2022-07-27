@@ -5,3 +5,9 @@ export function findAllExpenditureTypes() {
     url: "/account-book/expense/expenditureTypes/findAll",
   });
 }
+
+export function findAllIncomeTypes() {
+  return remote.postForm({
+    url: "/account-book/expense/incomeTypes/findAll",
+  });
+}

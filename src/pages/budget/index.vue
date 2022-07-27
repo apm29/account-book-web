@@ -77,7 +77,7 @@
                   :key="budgetDetail.id"
                 >
                   <div flex="~" items="center">
-                    {{ budgetDetail.budgetExpenditure.expenditureName }}
+                    {{ budgetDetail.budgetExpenditure.name }}
                     <n-popconfirm @positive-click="handleDeleteDetail(budgetDetail.id)">
                       <template #trigger>
                         <n-button type="error" text class="group-hover:visible" invisible>
@@ -170,7 +170,7 @@
 </template>
 
 <script setup>
-import { getPagedBudgets, deleteBudgetDetail, deleteBudget } from "@/api/budget";
+import { getPagedBudgets, deleteBudgetDetail, deleteBudget } from "~/api/budget";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 

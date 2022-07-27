@@ -32,8 +32,8 @@
 </template>
 
 <script setup>
-import { createFamily } from "@/api/family";
-import ScrollableContent from "@/components/ScrollableContent.vue";
+import { createFamily } from "~/api/family";
+import ScrollableContent from "~/components/ScrollableContent.vue";
 import { useMessage, useDialog } from "naive-ui";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";

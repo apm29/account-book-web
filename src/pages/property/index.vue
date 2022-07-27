@@ -153,7 +153,7 @@ import {
   getMyProperty,
   setPropertyAsset,
   setPropertyLiability,
-} from "@/api/user/property";
+} from "~/api/user/property";
 
 const loading = ref(true);
 const property = ref({});

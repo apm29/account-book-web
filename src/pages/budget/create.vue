@@ -13,7 +13,7 @@
             :checked="selectedTypes.includes(expenditureType.id)"
             @click="handleChangeSelectedTypes(expenditureType.id)"
           >
-            {{ expenditureType.expenditureName }}
+            {{ expenditureType.name }}
             <template #avatar>
               <i :class="expenditureType.icon"></i>
             </template>
@@ -104,14 +104,14 @@
 </template>
 
 <script setup>
-import { findBudgetById, createBudget } from "@/api/budget";
-import { findAllExpenditureTypes } from "@/api/dict";
+import { findBudgetById, createBudget } from "~/api/budget";
+import { useExpenditureTypes } from "~/composables";
 import dayjs from "dayjs";
 import { useMessage, useDialog } from "naive-ui";
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
-import ExpenditureTypeCreator from "@/components/expense/ExpenditureTypeCreator.vue";
+import ExpenditureTypeCreator from "~/components/expense/ExpenditureTypeCreator.vue";
 const loading = ref();
 const message = useMessage();
 const dialog = useDialog();
@@ -165,21 +165,12 @@ onMounted(getBudget);
 watch([budgetId], getBudget, { immediate: true });
 
 //类型字典
-const expenditureTypes = ref([]);
-function getExpenditureTypes() {
-  loading.value = true;
-  findAllExpenditureTypes()
-    .then((res) => (expenditureTypes.value = res.data))
-    .finally(() => {
-      loading.value = false;
-    });
-}
-function getExpenditureTypeNameById(id) {
-  return expenditureTypes.value.find((it) => it.id === id)?.expenditureName ?? "--";
-}
-function getExpenditureTypeIconById(id) {
-  return expenditureTypes.value.find((it) => it.id === id)?.icon ?? "i-carbon:wallet";
-}
+const {
+  expenditureTypes,
+  getExpenditureTypes,
+  getExpenditureTypeNameById,
+  getExpenditureTypeIconById,
+} = useExpenditureTypes();
 //新增类型
 function handleExpenditureTypeAdd(expenditureType) {
   expenditureTypes.value.push(expenditureType);

@@ -40,8 +40,8 @@
 </template>
 
 <script setup>
-import { joinFamily, searchFamily } from "@/api/family";
-import ScrollableContent from "@/components/ScrollableContent.vue";
+import { joinFamily, searchFamily } from "~/api/family";
+import ScrollableContent from "~/components/ScrollableContent.vue";
 import { useDebounceFn } from "@vueuse/core";
 import { useMessage, useDialog } from "naive-ui";
 import { unref } from "vue";

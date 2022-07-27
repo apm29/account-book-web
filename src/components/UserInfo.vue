@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { useAppStore } from "@/store";
+import { useAppStore } from "~/store";
 import { h } from "vue";
 import { useRouter } from "vue-router";
 

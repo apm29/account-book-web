@@ -113,7 +113,7 @@
 </template>
 
 <script setup>
-import { selectPagedFamily } from "@/api/family";
+import { selectPagedFamily } from "~/api/family";
 import { onMounted, unref } from "vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";

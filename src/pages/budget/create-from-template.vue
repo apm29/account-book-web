@@ -56,9 +56,9 @@
 </template>
 
 <script setup>
-import { createBudgetFromTemplate, searchBudgetTemplate } from "@/api/budget";
+import { createBudgetFromTemplate, searchBudgetTemplate } from "~/api/budget";
 import dayjs from "dayjs";
-import ScrollableContent from "@/components/ScrollableContent.vue";
+import ScrollableContent from "~/components/ScrollableContent.vue";
 import { useDebounceFn } from "@vueuse/core";
 import { useMessage, useDialog } from "naive-ui";
 import { useRouter } from "vue-router";
