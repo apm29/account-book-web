@@ -63,7 +63,7 @@ import { useDebounceFn } from "@vueuse/core";
 import { useMessage, useDialog } from "naive-ui";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
-import { onActivated } from "vue";
+import { onMounted } from "vue";
 const budgetTemplateId = ref();
 const yearMonth = ref(new Date().getTime());
 const budgetTitle = ref();
@@ -101,7 +101,7 @@ function templateSearch(query) {
     .finally(() => (loading.value = false));
 }
 const handleSearch = useDebounceFn(templateSearch, 800);
-onActivated(() => templateSearch(unref(defaultYear)));
+onMounted(() => templateSearch(unref(defaultYear)));
 
 function handleCreate() {
   creating.value = true;

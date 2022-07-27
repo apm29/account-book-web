@@ -11,3 +11,9 @@ const router = useRouter();
     </n-result>
   </main>
 </template>
+
+<route>
+{
+  "name":"NotFound"
+}
+</route>

@@ -114,7 +114,7 @@
 
 <script setup>
 import { selectPagedFamily } from "@/api/family";
-import { onActivated, unref } from "vue";
+import { onMounted, unref } from "vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 
@@ -141,7 +141,7 @@ async function getPagedData({ refresh } = {}) {
   total.value = data.totalElements;
   pageCount.value = data.totalPages;
 }
-onActivated(getPagedData);
+onMounted(getPagedData);
 watch(pageNo, getPagedData);
 watch(pageSize, () => getPagedData({ refresh: true }));
 const router = useRouter();

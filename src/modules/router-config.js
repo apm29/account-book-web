@@ -1,4 +1,4 @@
-const routeWhiteList = ["/login", "/register"];
+const routeWhiteList = ["Login", "Register", "InternalError", "NotFound", "Unauthorized"];
 import { useAppStore } from '~/store'
 //路由拦截,根据token查询是否为合法登录人
 /**
@@ -10,7 +10,7 @@ import { useAppStore } from '~/store'
 export const install = ({ router }) => {
   router?.beforeEach(async (to, from) => {
     //1.如果在路由白名单中直接放行
-    if (routeWhiteList.includes(to.path)) {
+    if (routeWhiteList.includes(to.name)) {
       return true;
     }
     //2.token为空时重定向到/login
@@ -23,8 +23,12 @@ export const install = ({ router }) => {
       try {
         await appStore.loginUserByToken(appStore.token)
       } catch (error) {
+        console.log(error);
         return {
-          name: "Login",
+          name: "InternalError",
+          query: {
+            error: '获取用户信息失败了'
+          }
         };
       }
     }

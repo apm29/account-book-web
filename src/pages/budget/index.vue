@@ -178,7 +178,7 @@ async function getPagedData({ refresh } = {}) {
   pagedData.value = data.content || [];
   total.value = data.totalElements;
 }
-onActivated(getPagedData);
+onMounted(getPagedData);
 
 const router = useRouter();
 function handleCreateFromTemplate() {

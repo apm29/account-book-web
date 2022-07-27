@@ -1,8 +1,8 @@
 <template>
   <ScrollableContent>
-    <n-list p="!x-3 !t-5">
+    <n-list p="!x-6 !t-5">
       <template #header>
-        <n-h2>{{ budget.budgetName }}</n-h2>
+        <n-h2>{{ budget.budgetTitle }}</n-h2>
       </template>
       <template v-if="isCreate">
         <n-h6>点击选择类型:</n-h6>
@@ -37,6 +37,9 @@
             <template #checked> 保存为预算模板 </template>
             <template #unchecked> 不保存为预算模板 </template>
           </n-switch>
+        </n-form-item>
+        <n-form-item label="预算模板名称">
+          <n-input v-model:value="budget.budgetTemplateTitle"> </n-input>
         </n-form-item>
         <n-list-item v-for="detail of budget.budgetDetails">
           <template #prefix>
@@ -79,15 +82,20 @@
         >
           生成预算表格
         </n-button>
-        <n-button
-          v-else
-          type="success"
-          block
-          :loading="loading"
-          @click="handleSaveBudget"
-        >
-          保存预算表格
-        </n-button>
+        <n-space vertical v-else>
+          <n-button type="success" block :loading="loading" @click="handleSaveBudget">
+            保存预算表格
+          </n-button>
+          <n-button
+            type="error"
+            block
+            ghost
+            :loading="loading"
+            @click="handleReselectTypes"
+          >
+            重新选择支出类型
+          </n-button>
+        </n-space>
       </template>
     </n-list>
   </ScrollableContent>
@@ -98,7 +106,7 @@ import { findBudgetById, createBudget } from "@/api/budget";
 import { findAllExpenditureTypes } from "@/api/dict";
 import dayjs from "dayjs";
 import { useMessage, useDialog } from "naive-ui";
-import { onActivated } from "vue";
+import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 const loading = ref();
@@ -109,11 +117,20 @@ const route = useRoute();
 
 const budgetId = computed(() => route.query.budgetId);
 const generated = ref();
-const isCreate = computed(() => !!!budgetId.value && !generated.value);
+const isCreate = computed(() => !generated.value);
 
 const budget = ref({
   budgetDetails: [],
 });
+
+//监听标题字段改变
+const yearMonth = computed(() => budget.value.budgetYearMonth);
+watch(yearMonth, function () {
+  const title = dayjs(yearMonth.value).format("YYYY年MM月预算表");
+  budget.value.budgetTitle = title;
+  budget.value.budgetTemplateTitle = `${title}-模板`;
+});
+
 //获取详情
 function getBudget() {
   if (!budgetId.value) {
@@ -125,9 +142,10 @@ function getBudget() {
   loading.value = true;
   findBudgetById(unref(budgetId))
     .then((res) => {
-      res.data.budgetDetails = {
+      budget.value = {
         budgetYearMonth: dayjs(res.data.budgetYearMonthName).valueOf(),
         budgetTitle: res.data.budgetName,
+        budgetId: res.data.id,
         budgetDetails:
           res.data.budgetDetails?.map((it) => ({
             budgetExpenditureTypeId: it?.budgetExpenditure?.id,
@@ -137,10 +155,10 @@ function getBudget() {
         creatDefaultDetails: false,
         saveAsBudgetTemplate: false,
       };
-      budget.value = res.data;
     })
     .finally(() => (loading.value = false));
 }
+onMounted(getBudget);
 watch([budgetId], getBudget, { immediate: true });
 
 //类型字典
@@ -159,7 +177,7 @@ function getExpenditureTypeNameById(id) {
 function getExpenditureTypeIconById(id) {
   return expenditureTypes.value.find((it) => it.id === id)?.icon ?? "i-carbon:wallet";
 }
-onActivated(getExpenditureTypes);
+onMounted(getExpenditureTypes);
 
 //已选择
 const selectedTypes = computed(() => {
@@ -182,10 +200,22 @@ function handleChangeSelectedTypes(typeId) {
 
 //生成预算基本表
 function handleGenerateBasicSheet() {
-  budget.value.budgetYearMonth = dayjs().valueOf();
-  budget.value.budgetTitle = dayjs().format("YYYY年MM月预算表");
+  if (!budget.value.budgetYearMonth) {
+    budget.value.budgetYearMonth = dayjs().valueOf();
+  }
+  if (!budget.value.budgetTitle) {
+    budget.value.budgetTitle = dayjs().format("YYYY年MM月预算表");
+  }
+  if (!budget.value.budgetTemplateTitle) {
+    budget.value.budgetTemplateTitle = `${budget.value.budgetTitle}-模板`;
+  }
   budget.value.saveAsBudgetTemplate = true;
   generated.value = true;
+}
+
+//重新选择表格
+function handleReselectTypes() {
+  generated.value = false;
 }
 
 //保存
@@ -196,9 +226,9 @@ function handleSaveBudget() {
     budgetYearMonth: dayjs(unref(budget).budgetYearMonth).format("YYYY-MM"),
   })
     .then(() => {
-      dialog.success({
+      return dialog.success({
         title: "成功",
-        content: "预算已创建",
+        content: budgetId.value ? "预算已更新" : "预算已创建",
         positiveText: "前往查看",
         onPositiveClick: () => {
           router.replace({

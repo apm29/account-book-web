@@ -162,7 +162,7 @@ async function getPropertyData() {
   const { data } = await getMyProperty().finally(() => (loading.value = false));
   property.value = data;
 }
-onActivated(getPropertyData);
+onMounted(getPropertyData);
 
 //编辑
 const [showEditAssetModal, toggleEditAsset] = useToggle();
