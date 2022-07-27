@@ -94,7 +94,7 @@
         @saved="handleSavedExpense"
       ></ExpenseEditor>
     </n-modal>
-    <ExpenseCreator />
+    <ExpenseCreator @saved="getViewData" />
   </ScrollableContent>
 </template>
 
