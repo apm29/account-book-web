@@ -29,7 +29,7 @@
           v-for="budget of pagedData"
         >
           <n-h2 space="x-3">
-            {{ budget.budgetName }}
+            <span m="r-6">{{ budget.budgetName }}</span>
             <n-button size="tiny" ghost type="success" @click="handleEdit(budget.id)">
               <template #icon>
                 <i i-carbon:edit></i>
@@ -55,6 +55,14 @@
                 type="relative"
               />
             </n-text>
+            <n-text type="info" text="xs">
+              更新于
+              <n-time
+                :time="0"
+                :to="dayjs().subtract(dayjs(budget.updateTime)).valueOf()"
+                type="relative"
+              />
+            </n-text>
           </n-h2>
           <n-table p="b-5" w="![calc(100vw-5rem)]" overflow="auto">
             <thead>
@@ -66,6 +74,7 @@
                   min="w-4rem"
                   class="group"
                   v-for="budgetDetail of budget.budgetDetails"
+                  :key="budgetDetail.id"
                 >
                   <div flex="~" items="center">
                     {{ budgetDetail.budgetExpenditure.expenditureName }}
@@ -88,7 +97,11 @@
                 <td>
                   <n-text type="success">预算金额</n-text>
                 </td>
-                <td v-for="budgetDetail of budget.budgetDetails" class="group">
+                <td
+                  v-for="budgetDetail of budget.budgetDetails"
+                  :key="budgetDetail.id"
+                  class="group"
+                >
                   <div flex="~" items="center">
                     {{ budgetDetail.budgetNumber.toFixed(2) }}
                     <n-button
@@ -109,7 +122,11 @@
                 <td>
                   <n-text type="success">备注</n-text>
                 </td>
-                <td v-for="budgetDetail of budget.budgetDetails" class="group">
+                <td
+                  v-for="budgetDetail of budget.budgetDetails"
+                  :key="budgetDetail.id"
+                  class="group"
+                >
                   <div flex="~" items="center" text="gray-600/50 sm">
                     {{ budgetDetail.remark }}
                   </div>

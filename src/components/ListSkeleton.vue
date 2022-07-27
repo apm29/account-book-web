@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <n-space vertical p="x-4 y-6" size="large" v-if="loading">
-      <template v-for="i in 10" :key="i">
+      <template v-for="_ in 3">
         <div flex="~" gap="4">
           <n-skeleton height="120px" circle />
           <div flex="grow" space="y-3">

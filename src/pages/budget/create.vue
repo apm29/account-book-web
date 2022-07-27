@@ -18,6 +18,8 @@
               <i :class="expenditureType.icon"></i>
             </template>
           </n-tag>
+          <ExpenditureTypeCreator @created="handleExpenditureTypeAdd">
+          </ExpenditureTypeCreator>
         </div>
       </template>
       <template v-else>
@@ -109,6 +111,7 @@ import { useMessage, useDialog } from "naive-ui";
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
+import ExpenditureTypeCreator from "@/components/expense/ExpenditureTypeCreator.vue";
 const loading = ref();
 const message = useMessage();
 const dialog = useDialog();
@@ -176,6 +179,10 @@ function getExpenditureTypeNameById(id) {
 }
 function getExpenditureTypeIconById(id) {
   return expenditureTypes.value.find((it) => it.id === id)?.icon ?? "i-carbon:wallet";
+}
+//新增类型
+function handleExpenditureTypeAdd(expenditureType) {
+  expenditureTypes.value.push(expenditureType);
 }
 onMounted(getExpenditureTypes);
 
