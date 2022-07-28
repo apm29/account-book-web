@@ -8,7 +8,7 @@
     gap="x-3"
     h="55px"
   >
-    <AppTitle v-if="!md"></AppTitle>
+    <AppTitle linker v-if="!md"></AppTitle>
     <n-menu :value="activeKey" mode="horizontal" :options="menuOptions" />
     <div flex="grow"></div>
     <n-input

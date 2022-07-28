@@ -5,7 +5,7 @@
     items="center"
     gap="x-2"
     cursor="default"
-    @click="link ? handleAppClick : null"
+    @click="handleAppClick"
   >
     <n-avatar round h="6" src="/logo.png"></n-avatar>
     {{ AppTitle }}
@@ -15,14 +15,14 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { AppTitle } from "~/composables";
-defineProps({
-  link: {
+const props = defineProps({
+  linker: {
     type: Boolean,
   },
 });
-
+const handleAppClick = computed(() => (props.linker ? routerToHome : null));
 const router = useRouter();
-function handleAppClick() {
+function routerToHome() {
   router.push({
     name: "Home",
   });

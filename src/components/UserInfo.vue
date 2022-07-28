@@ -21,13 +21,19 @@ function handleLogin() {
   });
 }
 
-const options = [
+const options = computed(() => [
+  {
+    label: userInfo.value.name,
+    key: "info",
+    disabled: true,
+    icon: () => h("i", { class: "i-carbon:user-avatar-filled" }),
+  },
   {
     label: "登出",
     key: "logout",
     icon: () => h("i", { class: "i-carbon-logout" }),
   },
-];
+]);
 function handleSelect(key) {
   switch (key) {
     case "logout":
