@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { findMonthlyExpenseView } from "@/api/statistics";
+import { findMonthlyExpenseView } from "~/api/statistics";
 import dayjs from "dayjs";
 
 const props = defineProps({

@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { findMonthlyBudgetExpenseView } from "@/api/statistics";
+import { findMonthlyBudgetExpenseView } from "~/api/statistics";
 import { useElementSize } from "@vueuse/core";
 import dayjs from "dayjs";
 import { unref } from "vue";
