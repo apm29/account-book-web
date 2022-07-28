@@ -8,47 +8,88 @@
         :data="budgetPieData"
         w="60"
         h="60"
-        title="预算饼图"
+        :title="expenseView.surplus > 0 ? '预算饼图' : '已超支'"
       ></BasicPieCharts>
-      <div col="span-2" flex="grow">
-        <n-statistic label="剩余预算" tabular-nums>
-          <span text="3xl">
-            <n-number-animation :from="0" :to="1000" :precision="2"> </n-number-animation>
-          </span>
-          <span text="sm">元</span>
-        </n-statistic>
+      <div flex="grow" ref="barContainer">
+        <div col="span-2" flex="~" gap="!x-4">
+          <n-statistic label="剩余预算" tabular-nums>
+            <span text="3xl">
+              <n-number-animation :from="0" :to="expenseView.surplus" :precision="2">
+              </n-number-animation>
+            </span>
+            <span text="sm">元</span>
+          </n-statistic>
 
-        <n-statistic label="本月预算" tabular-nums>
-          <span text="3xl">
-            <n-number-animation :from="0" :to="133039.22" :precision="2">
-            </n-number-animation>
-          </span>
-          <span text="sm">元</span>
-        </n-statistic>
+          <n-statistic label="本月预算" tabular-nums>
+            <span text="3xl">
+              <n-number-animation :from="0" :to="expenseView.budget" :precision="2">
+              </n-number-animation>
+            </span>
+            <span text="sm">元</span>
+          </n-statistic>
 
-        <n-statistic label="本月支出" tabular-nums>
-          <span text="3xl">
-            <n-number-animation :from="0" :to="132039.22" :precision="2">
-            </n-number-animation>
-          </span>
-          <span text="sm">元</span>
-        </n-statistic>
+          <n-statistic label="本月支出" tabular-nums>
+            <span text="3xl">
+              <n-number-animation :from="0" :to="expenseView.expenditure" :precision="2">
+              </n-number-animation>
+            </span>
+            <span text="sm">元</span>
+          </n-statistic>
+        </div>
+
+        <BasicBarCharts
+          :data="budgetBarData"
+          :dataAxisX="budgetBarX"
+          :w="width"
+          :h="60"
+          title="预算饼图"
+        ></BasicBarCharts>
       </div>
     </div>
   </n-card>
 </template>
 
 <script setup>
-const budgetPieData = ref([
-  {
-    name: "支出",
-    value: 10000,
-  },
-  {
-    name: "结余",
-    value: 1000,
-  },
-]);
+import { findMonthlyBudgetExpenseView } from "@/api/statistics";
+import { useElementSize } from "@vueuse/core";
+import dayjs from "dayjs";
+import { unref } from "vue";
+
+const expenseView = ref({
+  details: [],
+});
+const barContainer = ref();
+const { width } = useElementSize(barContainer);
+const budgetPieData = computed(() =>
+  expenseView.surplus > 0
+    ? [
+        {
+          name: "支出",
+          value: unref(expenseView).expenditure,
+        },
+        {
+          name: "结余",
+          value: unref(expenseView).surplus,
+        },
+      ]
+    : []
+);
+const budgetBarData = computed(() => {
+  return [
+    { data: unref(expenseView).details.map((it) => it.budgetNumber), name: "预算" },
+    { data: unref(expenseView).details.map((it) => it.expenseNumber), name: "支出" },
+  ];
+});
+
+const budgetBarX = computed(() => {
+  return unref(expenseView).details.map((it) => it.typeName);
+});
+
+onMounted(() => {
+  findMonthlyBudgetExpenseView({ yearMonth: dayjs().format("YYYY-MM") }).then((res) => {
+    expenseView.value = res.data;
+  });
+});
 </script>
 
 <style lang="scss" scoped></style>

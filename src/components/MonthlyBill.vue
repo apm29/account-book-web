@@ -6,7 +6,7 @@
     <div grid="~ cols-3" gap="x-5">
       <n-statistic label="月收入" tabular-nums>
         <span text="3xl">
-          <n-number-animation :from="0" :to="32039.22" :precision="2">
+          <n-number-animation :from="5000" :to="expenseView.income" :precision="2">
           </n-number-animation>
         </span>
         <span text="sm">元</span>
@@ -14,7 +14,7 @@
 
       <n-statistic label="月支出" tabular-nums>
         <span text="3xl">
-          <n-number-animation :from="0" :to="31039.22" :precision="2">
+          <n-number-animation :from="5000" :to="expenseView.expenditure" :precision="2">
           </n-number-animation>
         </span>
         <span text="sm">元</span>
@@ -22,7 +22,12 @@
 
       <n-statistic label="月结余" tabular-nums>
         <span text="3xl">
-          <n-number-animation :from="0" :to="1000.0" :precision="2"> </n-number-animation>
+          <n-number-animation
+            :from="1000"
+            :to="expenseView.income - expenseView.expenditure"
+            :precision="2"
+          >
+          </n-number-animation>
         </span>
         <span text="sm">元</span>
       </n-statistic>
@@ -30,6 +35,16 @@
   </n-card>
 </template>
 
-<script setup></script>
+<script setup>
+import { findMonthlyExpenseView } from "@/api/statistics";
+import dayjs from "dayjs";
+
+const expenseView = ref({});
+onMounted(() => {
+  findMonthlyExpenseView({ yearMonth: dayjs().format("YYYY-MM") }).then((res) => {
+    expenseView.value = res.data;
+  });
+});
+</script>
 
 <style lang="scss" scoped></style>
