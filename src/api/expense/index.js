@@ -10,10 +10,23 @@ export function createExpenditureType({ icon, expenditureName }) {
   });
 }
 
-export function createExpenditure({ amount, expenditureTypeId, remark }) {
+export function createExpenditure({ amount, expenditureTypeId, remark,
+  createTime }) {
   return remote.postForm({
     url: "/account-book/expense/expenditure/create",
-    data: { amount, expenditureTypeId, remark },
+    data: {
+      amount, expenditureTypeId, remark,
+      createTime
+    },
+  });
+}
+export function createIncome({ amount, incomeTypeId, remark, createTime }) {
+  return remote.postForm({
+    url: "/account-book/expense/income/create",
+    data: {
+      amount, incomeTypeId, remark,
+      createTime
+    },
   });
 }
 export function updateExpense({
@@ -22,6 +35,7 @@ export function updateExpense({
   expenseTypeId,
   expenseType,
   expenseId,
+  createTime
 }) {
   return remote.postForm({
     url: "/account-book/expense/update",
@@ -29,6 +43,20 @@ export function updateExpense({
       amount,
       remark,
       expenseTypeId,
+      expenseType,
+      expenseId,
+      createTime
+    },
+  });
+}
+
+export function deleteExpense({
+  expenseType,
+  expenseId,
+}) {
+  return remote.postForm({
+    url: "/account-book/expense/delete",
+    data: {
       expenseType,
       expenseId,
     },

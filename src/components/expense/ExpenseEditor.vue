@@ -34,14 +34,32 @@
         </template>
       </n-input>
     </n-form-item>
-    <n-button :loading="loading" type="success" @click="handleSaveExpense">
-      保存
-    </n-button>
+    <n-form-item label="时间">
+      <n-space items="center">
+        <n-date-picker v-model:value="createTimeTimestamp" type="datetime">
+        </n-date-picker>
+        <n-time
+          :time="0"
+          :to="dayjs().subtract(dayjs(createTime)).valueOf()"
+          type="relative"
+        >
+        </n-time>
+      </n-space>
+    </n-form-item>
+    <n-space justify="end">
+      <n-button :loading="loading" ghost type="error" @click="handleDeleteExpense">
+        删除
+      </n-button>
+      <n-button :loading="loading" type="success" @click="handleSaveExpense">
+        保存
+      </n-button>
+    </n-space>
   </div>
 </template>
 
 <script setup>
-import { updateExpense } from "~/api/expense";
+import dayjs from "dayjs";
+import { updateExpense, deleteExpense } from "~/api/expense";
 const props = defineProps({
   expenseId: [String, Number],
   expenseType: Number,
@@ -50,9 +68,19 @@ const props = defineProps({
   expenseTypeId: [String, Number],
   remark: String,
   amount: Number,
+  createTime: [Number, String],
 });
-const emits = defineEmits("saved");
+const emits = defineEmits(["saved", "update:createTime"]);
 const loading = ref();
+
+const createTimeTimestamp = computed({
+  get: () => {
+    return dayjs(props.createTime).valueOf();
+  },
+  set: (val) => {
+    emits("update:createTime", dayjs(val).format("YYYY-MM-DD HH:mm:ss"));
+  },
+});
 
 const message = useMessage();
 function handleSaveExpense() {
@@ -62,9 +90,20 @@ function handleSaveExpense() {
     expenseTypeId: props.expenseTypeId,
     remark: props.remark,
     expenseId: props.expenseId,
+    createTime: props.createTime,
   }).then(() => {
     message.success("更新成功");
     emits("saved");
+  });
+}
+
+function handleDeleteExpense() {
+  deleteExpense({
+    expenseType: props.expenseType,
+    expenseId: props.expenseId,
+  }).then(() => {
+    message.success("删除成功");
+    emits("deleted");
   });
 }
 </script>

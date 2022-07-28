@@ -18,7 +18,7 @@
               <i :class="expenditureType.icon"></i>
             </template>
           </n-tag>
-          <ExpenditureTypeCreator @created="handleExpenditureTypeAdd">
+          <ExpenditureTypeCreator @created="getExpenditureTypes">
           </ExpenditureTypeCreator>
         </div>
       </template>
@@ -171,10 +171,6 @@ const {
   getExpenditureTypeNameById,
   getExpenditureTypeIconById,
 } = useExpenditureTypes();
-//新增类型
-function handleExpenditureTypeAdd(expenditureType) {
-  expenditureTypes.value.push(expenditureType);
-}
 onMounted(getExpenditureTypes);
 
 //已选择

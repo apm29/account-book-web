@@ -39,13 +39,13 @@
               </n-time>
               <span flex="grow"></span>
               <span>
-                支出
+                支出:
                 <span>
                   {{ day.expenditure.toFixed(2) }}
                 </span>
               </span>
               <span>
-                收入
+                收入:
                 <span>
                   {{ day.income.toFixed(2) }}
                 </span>
@@ -58,22 +58,28 @@
                 <i text="xl" :class="expense.type.icon || 'i-carbon:wallet'"></i>
               </n-avatar>
             </template>
+            <div>
+              <div>{{ expense.type.name }}</div>
+              <div text="gray-500/60">{{ expense.remark }}</div>
+            </div>
             <template #suffix>
               <div flex="~" items="center" gap="x-4">
-                <n-text type="primary">
-                  {{ expense.amount.toFixed(2) }}
+                <n-text>
+                  <n-text>
+                    {{ expense.expenseType === 2000 ? "-" : "+" }}
+                  </n-text>
+                  <n-text>
+                    {{ expense.amount.toFixed(2) }}
+                  </n-text>
                 </n-text>
                 <n-button text @click="handleEditExpense(expense)">
                   <i i-carbon:edit text="2xl"></i>
                 </n-button>
               </div>
             </template>
-            <div>
-              <div>{{ expense.type.name }}</div>
-              <div text="gray-500/60">{{ expense.remark }}</div>
-            </div>
           </n-list-item>
         </n-list>
+        <div min="h-40"></div>
       </n-list>
     </ListSkeleton>
     <n-modal
@@ -89,9 +95,11 @@
         v-model:amount="editExpenseForm.amount"
         v-model:expenseType="editExpenseForm.expenseType"
         v-model:expenseTypeId="editExpenseForm.expenseTypeId"
+        v-model:createTime="editExpenseForm.createTime"
         :expenditureTypes="expenditureTypes"
         :incomeTypes="incomeTypes"
         @saved="handleSavedExpense"
+        @deleted="handleSavedExpense"
       ></ExpenseEditor>
     </n-modal>
     <ExpenseCreator @saved="getViewData" />
@@ -133,6 +141,7 @@ function handleEditExpense(expense) {
     remark: expense.remark,
     id: expense.id,
     amount: expense.amount,
+    createTime: expense.createTime,
   };
   toggleEditExpense();
 }
