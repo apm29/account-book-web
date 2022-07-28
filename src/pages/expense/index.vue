@@ -29,7 +29,7 @@
             </n-statistic>
           </n-space>
         </template>
-        <n-list bordered m="b-3" v-for="day of viewData.expenses">
+        <n-list bordered m="b-3" v-for="day of viewData.details">
           <template #header>
             <n-text type="info" flex items="center" gap="x-3">
               <n-time
@@ -52,7 +52,7 @@
               </span>
             </n-text>
           </template>
-          <n-list-item v-for="expense of day.expenses">
+          <n-list-item v-for="expense of day.details">
             <template #prefix>
               <n-avatar round>
                 <i text="xl" :class="expense.type.icon || 'i-carbon:wallet'"></i>
