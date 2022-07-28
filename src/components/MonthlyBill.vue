@@ -1,5 +1,5 @@
 <template>
-  <n-card p="x-4 y-2" title="7月账单" segmented>
+  <n-card p="x-4 y-2" :title="title" segmented>
     <template #header-extra>
       <i i-carbon:chevron-right text="2xl" cursor="pointer"></i>
     </template>
@@ -39,11 +39,31 @@
 import { findMonthlyExpenseView } from "@/api/statistics";
 import dayjs from "dayjs";
 
+const props = defineProps({
+  yearMonth: {
+    type: String,
+    default: () => {
+      return dayjs().format("YYYY-MM");
+    },
+  },
+});
+
+const { yearMonth } = toRefs(props);
+const title = computed(() => {
+  const day = dayjs(unref(yearMonth));
+  if (day.year() === dayjs().year()) {
+    return day.format("MM月账单");
+  }
+  return day.format("YYYY年MM月账单");
+});
+
 const expenseView = ref({});
 onMounted(() => {
-  findMonthlyExpenseView({ yearMonth: dayjs().format("YYYY-MM") }).then((res) => {
-    expenseView.value = res.data;
-  });
+  findMonthlyExpenseView({ yearMonth: dayjs(unref(yearMonth)).format("YYYY-MM") }).then(
+    (res) => {
+      expenseView.value = res.data;
+    }
+  );
 });
 </script>
 

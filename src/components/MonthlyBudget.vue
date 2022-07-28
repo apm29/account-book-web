@@ -1,5 +1,5 @@
 <template>
-  <n-card p="x-4 y-2" title="7月预算" segmented>
+  <n-card p="x-4 y-2" :title="title" segmented>
     <template #header-extra>
       <i i-carbon:chevron-right text="2xl" cursor="pointer"></i>
     </template>
@@ -55,6 +55,24 @@ import { useElementSize } from "@vueuse/core";
 import dayjs from "dayjs";
 import { unref } from "vue";
 
+const props = defineProps({
+  yearMonth: {
+    type: String,
+    default: () => {
+      return dayjs().format("YYYY-MM");
+    },
+  },
+});
+
+const { yearMonth } = toRefs(props);
+const title = computed(() => {
+  const day = dayjs(unref(yearMonth));
+  if (day.year() === dayjs().year()) {
+    return day.format("MM月预算");
+  }
+  return day.format("YYYY年MM月预算");
+});
+
 const expenseView = ref({
   details: [],
 });
@@ -86,7 +104,9 @@ const budgetBarX = computed(() => {
 });
 
 onMounted(() => {
-  findMonthlyBudgetExpenseView({ yearMonth: dayjs().format("YYYY-MM") }).then((res) => {
+  findMonthlyBudgetExpenseView({
+    yearMonth: dayjs(unref(yearMonth)).format("YYYY-MM"),
+  }).then((res) => {
     expenseView.value = res.data;
   });
 });

@@ -1,5 +1,5 @@
 <template>
-  <n-card p="x-4 y-2" title="7月支出" segmented>
+  <n-card p="x-4 y-2" :title="title" segmented>
     <template #header-extra>
       <i i-carbon:chevron-right text="2xl" cursor="pointer"></i>
     </template>
@@ -17,6 +17,24 @@
 <script setup>
 import dayjs from "dayjs";
 import { findMonthlyGrouedExpenseView } from "~/api/expense";
+
+const props = defineProps({
+  yearMonth: {
+    type: String,
+    default: () => {
+      return dayjs().format("YYYY-MM");
+    },
+  },
+});
+
+const { yearMonth } = toRefs(props);
+const title = computed(() => {
+  const day = dayjs(unref(yearMonth));
+  if (day.year() === dayjs().year()) {
+    return day.format("MM月支出");
+  }
+  return day.format("YYYY年MM月支出");
+});
 const expenseView = ref({
   details: [],
 });
@@ -37,7 +55,7 @@ const dataX = computed(() =>
 );
 onMounted(() => {
   findMonthlyGrouedExpenseView({
-    yearMonth: dayjs().format("YYYY-MM"),
+    yearMonth: dayjs(unref(yearMonth)).format("YYYY-MM"),
     expenseType: 2000,
   }).then((res) => {
     expenseView.value = res.data;
