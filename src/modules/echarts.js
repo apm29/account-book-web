@@ -9,6 +9,7 @@ import {
   GridComponent,
   DatasetComponent,
   TransformComponent,
+  LegendComponent,
 } from "echarts/components";
 // 标签自动布局，全局过渡动画等特性
 import { LabelLayout, UniversalTransition } from "echarts/features";
@@ -28,5 +29,6 @@ export function install({ router, app }) {
     LabelLayout,
     UniversalTransition,
     CanvasRenderer,
+    LegendComponent
   ]);
 }

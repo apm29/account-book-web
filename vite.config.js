@@ -34,7 +34,7 @@ export default defineConfig({
         '@vueuse/head',
         '@vueuse/core',
         {
-          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
+          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar', 'useThemeVars'],
         }
       ],
     }),

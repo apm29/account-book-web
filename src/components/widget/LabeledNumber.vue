@@ -1,6 +1,6 @@
 <template>
   <n-statistic :label="title" tabular-nums>
-    <span text="3xl" v-bind="$attrs">
+    <span class="text-3xl" v-bind="$attrs">
       <n-number-animation :from="0" :to="number" :precision="2"> </n-number-animation>
     </span>
     <span text="sm">元</span>
