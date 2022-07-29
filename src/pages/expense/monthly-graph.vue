@@ -1,6 +1,8 @@
 <template>
   <ScrollableContent>
     <n-list p="!x-5 !y-4">
+      <n-h1>{{ dayjs(yearMonth).format("YYYY年MM月账单") }}</n-h1>
+      <n-divider />
       <n-space items="start">
         <LabeledNumber
           title="本月结余"
