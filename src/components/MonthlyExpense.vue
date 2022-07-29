@@ -16,7 +16,7 @@
 
 <script setup>
 import dayjs from "dayjs";
-import { findMonthlyGrouedExpenseView } from "~/api/expense";
+import { findMonthlyGroupedByDayExpenseView } from "~/api/statistics";
 
 const props = defineProps({
   yearMonth: {
@@ -54,7 +54,7 @@ const dataX = computed(() =>
   Array.from({ length: dayjs().daysInMonth() }).map((_, index) => `${index + 1}日`)
 );
 onMounted(() => {
-  findMonthlyGrouedExpenseView({
+  findMonthlyGroupedByDayExpenseView({
     yearMonth: dayjs(unref(yearMonth)).format("YYYY-MM"),
     expenseType: 2000,
   }).then((res) => {

@@ -1,16 +1,15 @@
 <template>
   <n-card p="x-4 y-2" :title="title" segmented>
     <template #header-extra>
-      <i i-carbon:chevron-right text="2xl" cursor="pointer"></i>
+      <i
+        i-carbon:chevron-right
+        text="2xl"
+        cursor="pointer"
+        @click="$router.push({ name: 'ExpenseAnnuallyList' })"
+      ></i>
     </template>
     <div grid="~ cols-3" gap="x-5">
-      <n-statistic label="月收入" tabular-nums>
-        <span text="3xl">
-          <n-number-animation :from="5000" :to="expenseView.income" :precision="2">
-          </n-number-animation>
-        </span>
-        <span text="sm">元</span>
-      </n-statistic>
+      <LabeledNumber title="月收入" :number="expenseView.income"> </LabeledNumber>
 
       <n-statistic label="月支出" tabular-nums>
         <span text="3xl">

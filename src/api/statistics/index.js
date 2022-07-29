@@ -13,3 +13,23 @@ export function findMonthlyBudgetExpenseView({ yearMonth }) {
     data: { yearMonth }
   })
 }
+
+export function findMonthlyGroupedByDayExpenseView({
+  yearMonth, expenseType
+}) {
+  return remote.postForm({
+    url: "/account-book/statistics/monthly/grouped-by-day-statistics",
+    data: { yearMonth, expenseType }
+  })
+}
+
+
+export function findAnnuallyGroupedByMonthExpenseView({
+  year, expenseType
+}) {
+  return remote.postForm({
+    url: "/account-book/statistics/annually/grouped-by-month-statistics",
+    data: { year, expenseType }
+  })
+}
+

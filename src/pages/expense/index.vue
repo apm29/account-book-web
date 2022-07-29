@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { findMonthlyGrouedExpenseView } from "~/api/expense";
+import { findMonthlyGroupedByDayExpenseView } from "~/api/statistics";
 import { useExpenditureTypes, useIncomeTypes } from "~/composables";
 import dayjs from "dayjs";
 
@@ -116,7 +116,7 @@ const viewData = ref();
 const yearMonth = ref(dayjs().valueOf());
 function getViewData() {
   loading.value = true;
-  findMonthlyGrouedExpenseView({
+  findMonthlyGroupedByDayExpenseView({
     yearMonth: dayjs(yearMonth.value).format("YYYY-MM"),
   })
     .then((res) => (viewData.value = res.data))

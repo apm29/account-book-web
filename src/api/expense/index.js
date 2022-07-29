@@ -62,21 +62,3 @@ export function deleteExpense({
     },
   });
 }
-
-export function findMonthlyExpenseView({
-  yearMonth, expenseType
-}) {
-  return remote.postForm({
-    url: "/account-book/expense/monthly/statistics",
-    data: { yearMonth, expenseType }
-  })
-}
-
-export function findMonthlyGrouedExpenseView({
-  yearMonth, expenseType
-}) {
-  return remote.postForm({
-    url: "/account-book/expense/monthly/grouped-statistics",
-    data: { yearMonth, expenseType }
-  })
-}
