@@ -1,7 +1,11 @@
 <template>
   <ScrollableContent>
     <n-list p="!x-5 !y-4">
-      <n-h1>{{ dayjs(yearMonth).format("YYYY年MM月账单") }}</n-h1>
+      <n-h1 flex="~">
+        {{ dayjs(yearMonth).format("YYYY年MM月账单") }}
+        <div flex="grow"></div>
+        <MonthSelector v-model:yearMonth="yearMonth" />
+      </n-h1>
       <n-divider />
       <n-space items="start">
         <LabeledNumber
@@ -19,7 +23,7 @@
       <n-h2>支出类型</n-h2>
       <n-space>
         <BasicCharts w="50vw" h="60" :option="expenditureTypedOptions"> </BasicCharts>
-        <n-table flex="grow" size="tiny" p="x-2">
+        <n-table flex="grow" size="tiny">
           <thead>
             <tr>
               <th align="center" min="w-12vw">占比</th>
@@ -31,8 +35,10 @@
             <tr v-for="typed of expenseView.typedExpenditures">
               <td>
                 {{
-                  (typed.expenditureNumber / expenseView.expenditureNumber).toFixed(4) *
-                  100
+                  (
+                    (typed.expenditureNumber / expenseView.expenditureNumber) *
+                    100
+                  ).toFixed(2)
                 }}
                 %
               </td>
@@ -42,6 +48,7 @@
           </tbody>
         </n-table>
       </n-space>
+      <n-divider />
       <n-h2>支出排行</n-h2>
       <n-list-item v-for="(topExpenditure, index) of expenseView.topExpenditures">
         <template #prefix>
@@ -62,6 +69,11 @@
           <n-text> -{{ topExpenditure.amount }} </n-text>
         </template>
       </n-list-item>
+      <n-h2>支出趋势</n-h2>
+      <BasicCharts :option="expenditureTrendsOptions" w="90vw" h="80" />
+      <n-divider />
+      <n-h2>月支出对比</n-h2>
+      <BasicCharts :option="expenditureMonthTrendsOptions" w="90vw" h="80" />
     </n-list>
   </ScrollableContent>
 </template>
@@ -70,15 +82,8 @@
 import dayjs from "dayjs";
 import { findMonthlyTypedAndRankeExpenseGraphView } from "~/api/statistics";
 
-const props = defineProps({
-  yearMonth: {
-    type: String,
-    default: () => {
-      return dayjs().format("YYYY-MM");
-    },
-  },
-});
-const { yearMonth } = toRefs(props);
+const yearMonth = ref(dayjs().format("YYYY-MM"));
+
 const expenseView = ref({
   expenditureNumber: 0.0,
   incomeNumber: 0.0,
@@ -174,6 +179,7 @@ const expenditureTypedOptions = computed(() => ({
       icon: "roundRect",
     })),
   },
+  backgroundColor: "transparent",
   series: [
     {
       name: "支出类型",
@@ -202,13 +208,142 @@ const expenditureTypedOptions = computed(() => ({
   ],
 }));
 
-onMounted(() => {
+const expenditureTrendsOptions = computed(() => ({
+  tooltip: {
+    trigger: "axis",
+  },
+  backgroundColor: "transparent",
+  grid: {
+    left: 64,
+    right: 64,
+    top: 30,
+    bottom: 32,
+  },
+  xAxis: {
+    type: "category",
+    data: Array.from({ length: dayjs(unref(yearMonth)).daysInMonth() }).map(
+      (_, index) => `${index + 1}日`
+    ),
+    axisTick: {
+      show: false,
+    },
+    axisLabel: {
+      interval: 3,
+    },
+    boundaryGap: false,
+  },
+  yAxis: {
+    type: "value",
+    axisLine: {
+      show: false,
+    },
+    splitLine: {
+      show: false,
+    },
+    axisLabel: {
+      show: false,
+    },
+  },
+  series: [
+    {
+      type: "line",
+      data: Array.from({ length: dayjs(unref(yearMonth)).daysInMonth() }).map(
+        (_, index) => {
+          const dayOfMonth = index + 1;
+          const find = expenseView.value.timeSequencedExpenditures.find(
+            (detail) => dayjs(detail.descriptionOfRange).date() === dayOfMonth
+          );
+          return find ? find.expenditure : 0;
+        }
+      ),
+      smooth: true,
+      name: "当日支出",
+      markLine: {
+        data: [
+          { type: "average", name: "Avg" },
+          { type: "max", name: "Avg" },
+        ],
+      },
+      markPoint: {
+        data: [{ type: "max", name: "Max" }],
+      },
+    },
+  ],
+}));
+const expenditureMonthTrendsOptions = computed(() => ({
+  backgroundColor: "transparent",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: {
+      type: "shadow",
+    },
+  },
+  grid: {
+    left: "3%",
+    right: "4%",
+    bottom: "3%",
+    containLabel: true,
+  },
+  xAxis: [
+    {
+      type: "category",
+      data: expenseView.value.halfYearMonthlyGroupedExpenditure.map(
+        (it) => it.descriptionOfRange
+      ),
+      axisTick: {
+        show: false,
+      },
+      axisLine: {
+        lineStyle: {
+          color: "rgba(107, 114, 128, 0.6)",
+        },
+      },
+    },
+  ],
+  yAxis: [
+    {
+      type: "value",
+      axisLine: {
+        show: false,
+      },
+      splitLine: {
+        show: false,
+      },
+      axisLabel: {
+        show: false,
+      },
+    },
+  ],
+  series: [
+    {
+      name: "月支出",
+      type: "bar",
+      barWidth: "30",
+      data: expenseView.value.halfYearMonthlyGroupedExpenditure.map(
+        (it) => it.expenditure
+      ),
+      label: {
+        show: true,
+        position: "top",
+        textBorderColor: "transparent",
+        fontWeight: "bold",
+        formatter: "{c}元",
+      },
+      itemStyle: {
+        borderRadius: [8, 8, 0, 0], //（顺时针左上，右上，右下，左下）
+      },
+    },
+  ],
+}));
+const getViewData = function () {
   findMonthlyTypedAndRankeExpenseGraphView({
     yearMonth: dayjs(unref(yearMonth)).format("YYYY-MM"),
   }).then((res) => {
     expenseView.value = res.data;
   });
-});
+};
+onMounted(getViewData);
+watch(yearMonth, getViewData);
 </script>
 
 <style lang="scss" scoped></style>
