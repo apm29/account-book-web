@@ -71,8 +71,13 @@ const functions = [
     key: "PropertyIndex",
     icon: renderIcon("i-carbon:manage-protection"),
   },
+  {
+    label: renderRoute("GraphIndex", "图表"),
+    key: "GraphIndex",
+    icon: renderIcon("i-carbon:analytics"),
+  },
 ];
-const md = breakpoints.smaller("md");
+const md = breakpoints.smaller("lg");
 const menuOptions = computed(() => {
   return md.value
     ? [
