@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div flex="~ wrap" items="center" gap="x-2 y-1">
+    <!-- <div flex="~ wrap" items="center" gap="x-2 y-1">
       <n-tag
         checkable
         @click="handleEditIcon(expenditureType)"
@@ -14,37 +14,37 @@
       </n-tag>
     </div>
     <CarbonIconSelector filterable clearable v-model:value="editTypeForm.icon" />
-    <n-button @click="handleSave">SAVE</n-button>
+    <n-button @click="handleSave">SAVE</n-button> -->
   </div>
 </template>
 
 <script setup>
-import { unref } from "vue";
-import { useExpenditureTypes, remote } from "~/composables";
-//类型字典
-const {
-  expenditureTypes,
-  getExpenditureTypes,
-  getExpenditureTypeNameById,
-  getExpenditureTypeIconById,
-} = useExpenditureTypes();
-onMounted(getExpenditureTypes);
+// import { unref } from "vue";
+// import { useExpenditureTypes, remote } from "~/composables";
+// //类型字典
+// const {
+//   expenditureTypes,
+//   getExpenditureTypes,
+//   getExpenditureTypeNameById,
+//   getExpenditureTypeIconById,
+// } = useExpenditureTypes();
+// onMounted(getExpenditureTypes);
 
-const editTypeForm = ref({});
-function handleEditIcon(expenditureType) {
-  editTypeForm.value = { ...expenditureType };
-}
+// const editTypeForm = ref({});
+// function handleEditIcon(expenditureType) {
+//   editTypeForm.value = { ...expenditureType };
+// }
 
-function handleSave() {
-  remote
-    .postForm({
-      url: "/account-book/expense/expenditure-type/update",
-      data: unref(editTypeForm),
-    })
-    .then(() => {
-      getExpenditureTypes();
-    });
-}
+// function handleSave() {
+//   remote
+//     .postForm({
+//       url: "/account-book/expense/expenditure-type/update",
+//       data: unref(editTypeForm),
+//     })
+//     .then(() => {
+//       getExpenditureTypes();
+//     });
+// }
 </script>
 
 <style lang="scss" scoped></style>
