@@ -3,10 +3,10 @@
     <ListSkeleton :loading="loading" p="!x-6 !y-4">
       <n-list v-if="viewData">
         <template #header>
-          <div flex="~">
+          <div flex="~" items="start">
             <n-h3 prefix="bar">{{ dayjs(yearMonth).format("YYYY年MM月收支明细") }}</n-h3>
             <div flex="grow"></div>
-            <n-date-picker v-model:value="yearMonth" type="month" />
+            <MonthSelector v-model:yearMonth="yearMonth" />
           </div>
           <n-space justify="space-around" items="center" size="large">
             <n-statistic label="支出" text="center" tabular-nums>

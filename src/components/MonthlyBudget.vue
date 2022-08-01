@@ -79,7 +79,7 @@ const expenseView = ref({
 const barContainer = ref();
 const { width } = useElementSize(barContainer);
 const budgetPieData = computed(() =>
-  expenseView.surplus > 0
+  expenseView.value.surplus >= 0
     ? [
         {
           name: "支出",
