@@ -3,11 +3,15 @@
     <n-list>
       <template #header>
         <div>
-          <LabeledNumber
-            text="center 5xl"
-            title="结余"
-            :number="expenseView.surplus"
-          ></LabeledNumber>
+          <div flex="~" gap="4" justify="center" items="center" p="y-5" relative="~">
+            <LabeledNumber
+              text="center 5xl"
+              title="结余"
+              :number="expenseView.surplus"
+            ></LabeledNumber>
+            <YearSelector v-model:year="year" absolute="~" right="1" />
+          </div>
+
           <div flex="~" gap="4" justify="center" items="center" p="y-5">
             <LabeledNumber
               text="center"
@@ -56,26 +60,20 @@
 import dayjs from "dayjs";
 import { findAnnuallyGroupedByMonthExpenseView } from "~/api/statistics";
 
-const props = defineProps({
-  year: {
-    type: String,
-    default: () => {
-      return dayjs().format("YYYY");
-    },
-  },
-});
-const { year } = toRefs(props);
+const year = ref(dayjs().format("YYYY"));
 const expenseView = ref({
   details: [],
 });
-onMounted(() => {
+const getViewData = () => {
   findAnnuallyGroupedByMonthExpenseView({
     year: dayjs(unref(year)).format("YYYY"),
     expenseType: null,
   }).then((res) => {
     expenseView.value = res.data;
   });
-});
+};
+onMounted(getViewData);
+watch(year, getViewData);
 </script>
 
 <style lang="scss" scoped></style>

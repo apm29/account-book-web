@@ -52,11 +52,9 @@
       <n-h2>支出排行</n-h2>
       <n-list-item v-for="(topExpenditure, index) of expenseView.topExpenditures">
         <template #prefix>
-          <div flex="~" items="center">
+          <div flex="~" items="center" gap="x-3" font="bold">
             <n-text type="info">{{ index + 1 }}</n-text>
-            <div bg="gray-300/50" rounded="full" m="2" p="1">
-              <i :class="topExpenditure.type.icon" text="3xl"></i>
-            </div>
+            <ExpenseTypeIcon :icon="topExpenditure.type.icon"></ExpenseTypeIcon>
           </div>
         </template>
         <div>
@@ -81,6 +79,7 @@
 <script setup>
 import dayjs from "dayjs";
 import { findMonthlyTypedAndRankeExpenseGraphView } from "~/api/statistics";
+import ExpenseTypeIcon from "~/components/widget/ExpenseTypeIcon.vue";
 
 const yearMonth = ref(dayjs().format("YYYY-MM"));
 
@@ -263,9 +262,6 @@ const expenditureTrendsOptions = computed(() => ({
           { type: "average", name: "Avg" },
           { type: "max", name: "Avg" },
         ],
-      },
-      markPoint: {
-        data: [{ type: "max", name: "Max" }],
       },
     },
   ],

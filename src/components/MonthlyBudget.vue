@@ -1,15 +1,15 @@
 <template>
-  <n-card p="x-4 y-2" :title="title" segmented>
-    <template #header-extra>
-      <i i-carbon:chevron-right text="2xl" cursor="pointer"></i>
+  <n-card p="x-4 y-2" :title="titled ? title : null" segmented>
+    <template #header-extra v-if="titled">
+      <i
+        i-carbon:chevron-right
+        text="2xl"
+        cursor="pointer"
+        @click="$router.push({ name: 'BugdetMonthlyGraph' })"
+      ></i>
     </template>
     <div flex="~" gap="x-5">
-      <BasicPieCharts
-        :data="budgetPieData"
-        w="60"
-        h="60"
-        :title="expenseView.surplus > 0 ? '预算饼图' : '已超支'"
-      ></BasicPieCharts>
+      <BasicCharts :option="option" w="60" h="60"></BasicCharts>
       <div flex="grow" ref="barContainer">
         <div col="span-2" flex="~" gap="!x-4">
           <n-statistic label="剩余预算" tabular-nums>
@@ -62,7 +62,83 @@ const props = defineProps({
       return dayjs().format("YYYY-MM");
     },
   },
+  titled: {
+    type: Boolean,
+  },
 });
+
+const option = computed(() => ({
+  backgroundColor: "transparent",
+  series: [
+    {
+      type: "gauge",
+      startAngle: 90,
+      endAngle: -270,
+      pointer: {
+        show: false,
+      },
+      progress: {
+        show: true,
+        overlap: false,
+        roundCap: expenseView.value.surplus >= 0,
+        clip: false,
+        itemStyle: {
+          borderWidth: 1,
+          borderColor: "#464646",
+        },
+      },
+      axisLine: {
+        lineStyle: {
+          width: 20,
+        },
+      },
+      splitLine: {
+        show: false,
+        distance: 0,
+        length: 10,
+      },
+      axisTick: {
+        show: false,
+      },
+      axisLabel: {
+        show: false,
+        distance: 50,
+      },
+      data: [
+        {
+          value:
+            expenseView.value.surplus >= 0
+              ? ((expenseView.value.surplus / expenseView.value.budget) * 100).toFixed(2)
+              : 0,
+          name: expenseView.value.surplus >= 0 ? "剩余预算" : "已超支",
+          title: {
+            offsetCenter: ["0%", "0%"],
+          },
+          detail: {
+            valueAnimation: true,
+            show: expenseView.value.surplus >= 0,
+            offsetCenter: ["0%", "40%"],
+          },
+        },
+      ],
+      title: {
+        fontSize: 14,
+      },
+      detail: {
+        width: 50,
+        height: 14,
+        fontSize: 14,
+        color: "auto",
+        borderColor: "auto",
+        borderRadius: 20,
+        borderWidth: 1,
+        formatter: "{value}%",
+      },
+    },
+  ],
+}));
+
+const emits = defineEmits(["update:data"]);
 
 const { yearMonth } = toRefs(props);
 const title = computed(() => {
@@ -103,13 +179,16 @@ const budgetBarX = computed(() => {
   return unref(expenseView).details.map((it) => it.typeName);
 });
 
-onMounted(() => {
+const getViewData = () => {
   findMonthlyBudgetExpenseView({
     yearMonth: dayjs(unref(yearMonth)).format("YYYY-MM"),
   }).then((res) => {
     expenseView.value = res.data;
+    emits("update:data", res.data);
   });
-});
+};
+onMounted(getViewData);
+watch(yearMonth, getViewData);
 </script>
 
 <style lang="scss" scoped></style>

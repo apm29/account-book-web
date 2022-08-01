@@ -2,7 +2,7 @@
   <ScrollableContent>
     <div p="x-6 y-5" space="y-5">
       <MonthlyBill />
-      <MonthlyBudget />
+      <MonthlyBudget titled />
       <MonthlyExpense />
       <Property />
     </div>

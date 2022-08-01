@@ -54,9 +54,7 @@
           </template>
           <n-list-item v-for="expense of day.details">
             <template #prefix>
-              <n-avatar round>
-                <i text="xl" :class="expense.type.icon || 'i-carbon:wallet'"></i>
-              </n-avatar>
+              <ExpenseTypeIcon :icon="expense.type.icon"></ExpenseTypeIcon>
             </template>
             <div>
               <div>{{ expense.type.name }}</div>
@@ -110,6 +108,7 @@
 import { findMonthlyGroupedByDayExpenseView } from "~/api/statistics";
 import { useExpenditureTypes, useIncomeTypes } from "~/composables";
 import dayjs from "dayjs";
+import ExpenseTypeIcon from "~/components/widget/ExpenseTypeIcon.vue";
 
 const loading = ref(true);
 const viewData = ref();

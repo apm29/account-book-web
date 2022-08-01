@@ -90,6 +90,9 @@
                     </n-popconfirm>
                   </div>
                 </th>
+                <th min="w-6rem">
+                  <n-text type="warning">总计</n-text>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -116,6 +119,9 @@
                       </template>
                     </n-button>
                   </div>
+                </td>
+                <td>
+                  {{ budget.budgetTotal.toFixed(2) }}
                 </td>
               </tr>
               <tr>
