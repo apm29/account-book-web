@@ -36,6 +36,17 @@
               </template>
               编辑预算
             </n-button>
+            <n-button
+              size="tiny"
+              ghost
+              type="success"
+              @click="handleViewChartDetail(budget.budgetYearMonthName)"
+            >
+              <template #icon>
+                <i i-carbon:chart-area-smooth></i>
+              </template>
+              预算图表
+            </n-button>
             <n-popconfirm @positive-click="handleDelete(budget.id)">
               确认删除该月预算吗?
               <template #trigger>
@@ -227,6 +238,15 @@ function handleEdit(budgetId) {
     query: {
       redirect: "BudgetIndex",
       budgetId,
+    },
+  });
+}
+
+function handleViewChartDetail(budgetYearMonthName) {
+  router.push({
+    name: "BugdetMonthlyGraph",
+    query: {
+      yearMonth: budgetYearMonthName,
     },
   });
 }

@@ -1,7 +1,12 @@
 <template>
   <n-card p="x-4 y-2" title="个人资产" segmented>
     <template #header-extra>
-      <i i-carbon:chevron-right text="2xl" cursor="pointer"></i>
+      <i
+        i-carbon:chevron-right
+        text="2xl"
+        cursor="pointer"
+        @click="$router.push({ name: 'PropertyIndex' })"
+      ></i>
     </template>
     <div grid="~ cols-3" gap="x-5">
       <n-statistic label="净资产" tabular-nums>

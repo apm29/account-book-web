@@ -59,8 +59,8 @@ export default defineConfig({
     hotOnly: false,
     proxy: {
       "/account-book": {
-        // target: "http://account.jiayupearl.shop",
-        target: "http://localhost:9901",
+        target: "http://account.jiayupearl.shop",
+        // target: "http://localhost:9901",
         changeOrigin: true,
       },
     },

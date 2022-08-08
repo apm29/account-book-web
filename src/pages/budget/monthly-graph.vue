@@ -125,10 +125,11 @@
 
 <script setup>
 import dayjs from "dayjs";
+import { useRoute } from "vue-router";
 import ExpenseTypeIcon from "~/components/widget/ExpenseTypeIcon.vue";
 import LabeledNumber from "~/components/widget/LabeledNumber.vue";
-
-const yearMonth = ref(dayjs().format("YYYY-MM"));
+const route = useRoute();
+const yearMonth = ref(dayjs(route.query.yearMonth).format("YYYY-MM"));
 
 const budgetViewData = ref({
   expenditure: 0,

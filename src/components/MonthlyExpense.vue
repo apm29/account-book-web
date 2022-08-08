@@ -1,7 +1,12 @@
 <template>
   <n-card p="x-4 y-2" :title="title" segmented>
     <template #header-extra>
-      <i i-carbon:chevron-right text="2xl" cursor="pointer"></i>
+      <i
+        i-carbon:chevron-right
+        text="2xl"
+        cursor="pointer"
+        @click="$router.push({ name: 'ExpenseIndex' })"
+      ></i>
     </template>
     <div flex="~" gap="x-5">
       <BasicLineCharts
